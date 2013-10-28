@@ -25,10 +25,10 @@
     },
     "autoload": {
         "psr-0": {
-            "Bestnetwork\\Telnet\\": ""
+            "": ""
         }
     },
-    "target-dir" : "Bestnetwork/Telnet"
+    "target-dir" : ""
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
