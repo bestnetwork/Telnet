@@ -1,0 +1,37 @@
+{
+    "name": "bestnetwork/telnet",
+    "description": "Telnet client in php",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Dalibor Andzakovic",
+            "email": "dali@swerve.co.nz"
+        },
+        {
+            "name": "Marc Ennaji"
+        },
+        {
+            "name": "Matthias Blaser",
+            "email": "mb@adfinis.ch"
+        },
+        {
+            "name": "Christian Hammers",
+            "email": "chammers@netcologne.de"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "autoload": {
+        "psr-0": { "Bestnetwork\\Telnet\\": "" }
+    },
+    "target-dir": "Bestnetwork/Telnet",
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.0.1-dev"
+        }
+    }
+}
+
