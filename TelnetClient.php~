@@ -22,7 +22,7 @@ class TelnetClient {
 	private $port;
 	private $timeout;
 
-	private $socket = NULL;
+	private $socket  = NULL;
 	private $buffer = NULL;
 	private $prompt;
 	private $errno;

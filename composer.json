@@ -24,8 +24,11 @@
         "php": ">=5.3.3"
     },
     "autoload": {
-        "psr-0": { "": "" }
+        "psr-0": {
+            "": ""
+        }
     },
+    "target-dir" : ""
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {

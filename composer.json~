@@ -24,12 +24,15 @@
         "php": ">=5.3.3"
     },
     "autoload": {
-        "psr-0": { "": "" }
+        "psr-0": {
+            "Bestnetwork\\Telnet\\": ""
+        }
     },
+    "target-dir" : "Bestnetwork/Telnet"
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
-            "dev-master": "master-dev"
+            "dev-master": "0.0-dev"
         }
     }
 }
