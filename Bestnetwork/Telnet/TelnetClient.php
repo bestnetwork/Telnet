@@ -97,7 +97,7 @@ class TelnetClient {
 
 			if($this->host == $ip){
 
-				throw new Exception("Cannot resolve $this->host");
+				throw new \Exception("Cannot resolve $this->host");
 
 			} else{
 				$this->host = $ip;
@@ -108,7 +108,7 @@ class TelnetClient {
 		$this->socket = fsockopen($this->host, $this->port, $this->errno, $this->errstr, $this->timeout);
 
 		if(!$this->socket){
-			throw new Exception("Cannot connect to $this->host on port $this->port");
+			throw new \Exception("Cannot connect to $this->host on port $this->port");
 		}
 
 		$this->waitPrompt();
@@ -124,7 +124,7 @@ class TelnetClient {
 	public function disconnect(){
 		if($this->socket){
 			if(! fclose($this->socket)){
-				throw new Exception("Error while closing telnet socket");
+				throw new \Exception("Error while closing telnet socket");
 			}
 			$this->socket = NULL;
 		}
@@ -168,7 +168,7 @@ class TelnetClient {
 			$this->waitPrompt();
 		} catch(Exception $e){
 
-			throw new Exception("Login failed.");
+			throw new \Exception("Login failed.");
 		}
 
 		return self::TELNET_OK;
@@ -216,7 +216,7 @@ class TelnetClient {
 	protected function readTo($prompt){
 
 		if(!$this->socket){
-			throw new Exception("Telnet connection closed");
+			throw new \Exception("Telnet connection closed");
 		}
 
 		// clear the buffer
@@ -226,13 +226,13 @@ class TelnetClient {
 		do {
 			// time's up (loop can be exited at end or through continue!)
 			if(time() > $until_t){
-				throw new Exception("Couldn't find the requested : '$prompt' within {$this->timeout} seconds");
+				throw new \Exception("Couldn't find the requested : '$prompt' within {$this->timeout} seconds");
 			}
 
 			$c = $this->getc();
 
 			if($c === false){
-				throw new Exception("Couldn't find the requested : '" . $prompt . "', it was not in the data returned from server: " . $this->buffer);
+				throw new \Exception("Couldn't find the requested : '" . $prompt . "', it was not in the data returned from server: " . $this->buffer);
 			}
 
 			// Interpreted As Command
@@ -263,7 +263,7 @@ class TelnetClient {
 	protected function write($buffer, $addNewLine = true){
 
 		if(!$this->socket){
-			throw new Exception("Telnet connection closed");
+			throw new \Exception("Telnet connection closed");
 		}
 
 		// clear buffer from last command
@@ -275,7 +275,7 @@ class TelnetClient {
 
 		$this->global_buffer .= $buffer;
 		if(!fwrite($this->socket, $buffer) < 0){
-			throw new Exception("Error writing to socket");
+			throw new \Exception("Error writing to socket");
 		}
 
 		return self::TELNET_OK;
@@ -324,10 +324,10 @@ class TelnetClient {
 				$opt = $this->getc();
 				fwrite($this->socket, $this->IAC . $this->DONT . $opt);
 			} else {
-				throw new Exception('Error: unknown control character ' . ord($c));
+				throw new \Exception('Error: unknown control character ' . ord($c));
 			}
 		} else {
-			throw new Exception('Error: Something Wicked Happened');
+			throw new \Exception('Error: Something Wicked Happened');
 		}
 
 		return self::TELNET_OK;
