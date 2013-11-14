@@ -48,7 +48,7 @@ class TelnetClient {
      * @param int $timeout Connection timeout in seconds
      * @return void
      */
-    public function __construct( $host = '127.0.0.1', $port = '23', $timeout = 10, $prompt = '$', $err_prompt = 'ERROR' ){
+    public function __construct( $host = '127.0.0.1', $port = 23, $timeout = 10, $prompt = '$', $err_prompt = 'ERROR' ){
         $this->host = $host;
         $this->port = $port;
         $this->timeout = $timeout;
@@ -98,7 +98,7 @@ class TelnetClient {
         }
 
         // attempt connection
-        $this->socket = fsockopen($this->host, $this->port, $this->errno, $this->errstr, $this->timeout);
+        $this->socket = @fsockopen($this->host, $this->port, $this->errno, $this->errstr, $this->timeout);
 
         if( !$this->socket ){
             throw new TelnetException('Cannot connect to ' . $this->host . ' on port ' . $this->port);
