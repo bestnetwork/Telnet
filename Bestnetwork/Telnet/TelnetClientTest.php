@@ -6,20 +6,24 @@ class TelnetClientTest extends \PHPUnit_Framework_TestCase {
     /**
      * @dataProvider connectionParametersProvider
      */
-    public function testConnect( $host, $port, $user, $pass ){
+    public function testConnect( $host, $port = NULL, $user = NULL, $pass = NULL ){
         $client = new TelnetClient( $host, $port );
         $client->connect();
-        $client->login($user, $pass);
+
+        if ($user && $pass) {
+            $client->login($user, $pass);
+        }
+
         $client->disconnect();
     }
     
     public function connectionParametersProvider(){
         return array(
             array(
-                'host' => '192.168.1.91',
+                'host' => '192.168.1.1',
                 'port' => 23,
-                'user' => 'Admin',
-                'pass' => '2n'
+                'user' => 'admin',
+                'pass' => 'admin'
             )
         );
     }
