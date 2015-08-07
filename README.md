@@ -1,4 +1,4 @@
 Telnet
 ======
 
-Telent client written in php
+Telnet client written in php

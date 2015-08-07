@@ -18,35 +18,37 @@ namespace Bestnetwork\Telnet;
 */
 class TelnetClient {
 
-    private $host;
-    private $port;
-    private $timeout;
+    protected $host;
+    protected $port;
+    protected $timeout;
 
-    private $socket = NULL;
-    private $buffer = NULL;
-    private $prompt;
-    private $err_prompt;
-    private $errno;
-    private $errstr;
+    protected $socket = NULL;
+    protected $buffer = NULL;
+    protected $prompt;
+    protected $err_prompt;
+    protected $errno;
+    protected $errstr;
 
-    private $NULL;
-    private $DC1;
-    private $WILL;
-    private $WONT;
-    private $DO;
-    private $DONT;
-    private $IAC;
+    protected $NULL;
+    protected $DC1;
+    protected $WILL;
+    protected $WONT;
+    protected $DO;
+    protected $DONT;
+    protected $IAC;
 
-    private $global_buffer = '';
+    protected $global_buffer = '';
 
     /**
      * Constructor. Initialises host, port and timeout parameters
      * defaults to localhost port 23 (standard telnet port)
      *
-     * @param string $host Host name or IP addres
-     * @param int $port TCP port number
-     * @param int $timeout Connection timeout in seconds
-     * @return void
+     * @param string $host    Host name or IP address
+     * @param int    $port    TCP port number
+     * @param int    $timeout Connection timeout in seconds
+     * @param string $prompt
+     * @param string $err_prompt
+     * @throws TelnetException
      */
     public function __construct( $host = '127.0.0.1', $port = 23, $timeout = 10, $prompt = '$', $err_prompt = 'ERROR' ){
         $this->host = $host;
@@ -81,9 +83,10 @@ class TelnetClient {
     }
 
     /**
-     * Attempts connection to remote host. Returns TRUE if sucessful.
+     * Attempts connection to remote host. Returns TRUE if successful.
      *
-     * @return boolean
+     * @return bool
+     * @throws TelnetException
      */
     public function connect(){
         // check if we need to convert host to IP
@@ -108,7 +111,7 @@ class TelnetClient {
     /**
      * Closes IP socket
      *
-     * @return boolean
+     * @throws TelnetException
      */
     public function disconnect(){
         if( $this->socket ){
@@ -123,8 +126,11 @@ class TelnetClient {
      * Executes command and returns a string with result.
      * This method is a wrapper for lower level private methods
      *
-     * @param string $command Command to execute
+     * @param string      $command Command to execute
+     * @param null|string $prompt
+     * @param null|string $err_prompt
      * @return string Command result
+     * @throws TelnetException
      */
     public function execute( $command, $prompt = NULL, $err_prompt = NULL ){
         $this->write($command);
@@ -140,7 +146,7 @@ class TelnetClient {
      *
      * @param string $username Username
      * @param string $password Password
-     * @return boolean
+     * @throws TelnetException
      */
     public function login( $username, $password ){
         
@@ -181,7 +187,7 @@ class TelnetClient {
     /**
      * Gets character from the socket
      *
-     * @return void
+     * @return string
      */
     protected function getc(){
         $c = fgetc($this->socket);
@@ -200,11 +206,12 @@ class TelnetClient {
 
     /**
      * Reads characters from the socket and adds them to command buffer.
-     * Handles telnet control characters. Stops when prompt is ecountered.
+     * Handles telnet control characters. Stops when prompt is encountered.
      *
      * @param string $prompt
      * @param string $err_prompt
-     * @return boolean
+     * @return string
+     * @throws TelnetException
      */
     protected function read( $prompt = NULL, $err_prompt = NULL ){
         if( !$this->socket ){
@@ -249,7 +256,7 @@ class TelnetClient {
             if( substr($this->buffer, strlen($this->buffer) - strlen($prompt)) == $prompt ){
                 return substr($this->buffer, 0, strlen($this->buffer) - strlen($prompt));
             }elseif( strlen($err_prompt) && substr($this->buffer, strlen($this->buffer) - strlen($err_prompt)) == $err_prompt ){
-                throw new TelnetException('Commad has returned ERROR status');
+                throw new TelnetException('Command has returned ERROR status');
             }
 
         }while( $c != $this->NULL || $c != $this->DC1 );
@@ -258,9 +265,9 @@ class TelnetClient {
     /**
      * Write command to a socket
      *
-     * @param string $buffer Stuff to write to socket
+     * @param string  $buffer     Stuff to write to socket
      * @param boolean $addNewLine Default true, adds newline to the command
-     * @return boolean
+     * @throws TelnetException
      */
     protected function write( $buffer, $addNewLine = true ){
         if( !$this->socket ){
@@ -305,8 +312,7 @@ class TelnetClient {
     /**
      * Telnet control character magic
      *
-     * @param string $command Character to check
-     * @return boolean
+     * @throws TelnetException
      */
     protected function negotiateTelnetOptions(){
         $c = $this->getc();
