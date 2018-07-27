@@ -146,16 +146,19 @@ class TelnetClient {
      *
      * @param string $username Username
      * @param string $password Password
+     * @param string $usernamePrompt Username Prompt
+     * @param string $passwordPrompt Password Prompt
+     * @param string $loggedPrompt Confirmation Prompt
      * @throws TelnetException
      */
-    public function login( $username, $password ){
+    public function login( $username, $password, $usernamePrompt = 'Login:', $passwordPrompt = 'Password:', $loggedPrompt = 'OK' ){
         
         try{
-            $this->read('Login:');
+            $this->read($usernamePrompt);
             $this->write((string) $username);
-            $this->read('Password:');
+            $this->read($passwordPrompt);
             $this->write((string) $password);
-            $this->read('OK');
+            $this->read($loggedPrompt);
 
         } catch( TelnetException $e ){
             throw new TelnetException('Login failed.', 0, $e);
